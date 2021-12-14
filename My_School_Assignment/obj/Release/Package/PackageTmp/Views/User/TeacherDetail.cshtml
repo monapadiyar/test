@@ -1,0 +1,219 @@
+﻿@model IEnumerable<My_School_Assignment.Models.SignupModel>
+
+
+@{
+    ViewBag.Title = "TeacherDetail";
+}
+
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/tablesorter/jquery.tablesorter.min.js" type="text/javascript"></script>
+<link href="~/Scripts/tablesorter/themes/blue/style.css" rel="stylesheet" />
+<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
+      rel="stylesheet" type="text/css" />
+<script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+
+
+<div id="details">
+    <hr /><h2>Teacher's Detail</h2>
+    <style type="text/css">
+        .table th, .table td {
+            text-align: center;
+        }
+    </style>
+
+    <table id="Student" class="table table-bordered table-condensed tablesorter">
+        <thead>
+            <tr>
+
+                <th><div style="margin-right: 10px;"><b>First Name</b></div></th>
+                <th><div style="margin-right: 10px;"><b>Last Name</b></div></th>
+                <th><div style="margin-right: 10px;"><b>Date Of Birth</b></div></th>
+                <th><div style="margin-right: 10px;"><b>Date Of Joining</b></div></th>
+                <th><div style="margin-right: 10px;"><b>Email</b></div></th>
+                <th><div style="margin-right: 10px;"><b>Class Name</b></div></th>
+                <th><div style="margin-right: 10px;"><b> Action</b></div></th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="row_">
+
+                    <td>@Html.DisplayFor(modelItem => item.firstname)</td>
+                    <td>@Html.DisplayFor(modelItem => item.lastname)</td>
+                    <td><span>@Html.DisplayFor(modelItem => item.dateofbirth)</span></td>
+                    <td><span>@Html.DisplayFor(modelItem => item.dateofjoin)</span></td>
+                    <td>@Html.DisplayFor(modelItem => item.email)</td>
+                    <td >@Html.DisplayFor(modelItem => item.classname)</td>
+                    <td><a href="#" class="btn btn-lg"  onclick="Assign(@item.T_Id)">Assign Class</a> |
+                        <a href="#" class="btn btn-lg" onclick="ConfirmEdit(@item.T_Id)"><i class="glyphicon glyphicon-edit" title="Edit"></i></a> |
+                        <a href="#" class="btn btn-lg" onclick="ConfirmDelete(@item.T_Id)"><i class="glyphicon glyphicon-trash" title="Delete"></i></a> 
+                    </td>     
+                    
+                </tr>
+            }
+        </tbody>
+    </table>        
+</div>
+
+@*for assign Class*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Assign Class</h4>
+            </div>
+            <div class="modal-body">
+                <div id="edit1"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="btnGetSkills" >Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*for delete class*@
+<input type="hidden" id="hideId" />
+<input type="hidden" id="TeacherId" />
+<input type="hidden" id="tremove" />
+
+
+<div class="modal fade" id="myModal2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Teacher</h4>
+            </div>
+            <div class="modal-body">
+                <p>"Are you sure you Want to delete this Teacher?"</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="DeleteTeacher()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="edit1"></div>
+<div id="edit2"></div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+      
+        $("table").tablesorter({          
+            textExtraction: {
+               
+                2: function (node, table, cellIndex) { return $(node).find("span").text(); },
+                3: function (node, table, cellIndex) { return $(node).find("span").text(); },               
+
+            },
+            headers: {
+
+                5: { sorter: false },
+                6: { sorter: false }
+            }
+
+        });
+
+      
+        
+    });
+
+    //Delete teacher
+    function ConfirmDelete(id) {
+       var t_remove= $("#tremove").val(id);
+        $("#hideId").val(id);
+        $("#myModal2").modal('show');
+
+    }
+    function DeleteTeacher(){
+        var id1 = $("#hideId").val();
+       
+       $.ajax({
+            type: "POST",
+            url:"/User/DeleteTeacher",
+            data : {td : id1 } ,
+            success : function (result)
+            {
+                $("#myModal2").modal('hide');
+                window.location.href = "TeacherDetail";
+            }
+            }) 
+    }
+
+    //edit Teacher
+    function ConfirmEdit(id)
+    {
+        
+       $.ajax({
+            type: "POST",
+            url:"/User/EditTeacher",
+            data : { td : id } ,
+            success : function (result)
+            {
+             
+                $("#details").hide();
+
+                $("#edit2").html(result); 
+            }
+            })
+    }
+
+    //confirm class
+    $("#btnGetSkills").click(function () {
+     
+       var tid= $("#TeacherId").val()
+        var str = $("#mylist").val();
+
+        if (str.indexOf(',') ){
+            var strarray = str.toString().split(',');
+
+        }
+      
+        var classArray = [];
+
+        for (var i = 0; i < strarray.length; i++){
+            classArray.push(strarray[i])               
+        }
+
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: "/User/AssignClass",
+            data: {'teacherId': tid,'classArray': classArray },
+            success: function (result) {
+                    $("#myModal").modal('hide');
+                    window.location.href = "TeacherDetail";    
+              }    
+             })
+    })
+    
+    //assign Class
+    function Assign(td) {
+        $("#TeacherId").val(td);
+        $("#myModal").modal('show');
+        $.ajax({           
+            url: "/User/ClassShow",  
+            data:{td1 : td},
+            success: function (result) {
+               // $("#details").hide();
+                $("#edit1").html(result);
+            }
+            })
+    }
+ 
+</script>

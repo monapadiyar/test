@@ -1,0 +1,440 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MySchoolModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AssignClass2">
+          <Key>
+            <PropertyRef Name="A_Id" />
+          </Key>
+          <Property Name="A_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="T_Id" Type="int" Nullable="false" />
+          <Property Name="C_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="classes1">
+          <Key>
+            <PropertyRef Name="classid" />
+          </Key>
+          <Property Name="classid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="classname" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="studentname" Type="varchar" MaxLength="50" />
+          <Property Name="dateofbirth" Type="date" />
+          <Property Name="classid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="T_Id" />
+          </Key>
+          <Property Name="T_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstname" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="lastname" Type="varchar" MaxLength="50" />
+          <Property Name="dateofjoin" Type="date" Nullable="false" />
+          <Property Name="dateofbirth" Type="date" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password1" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRoleMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="RoleId" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__UserRoleM__RoleI__6D0D32F4">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="UserRoleMapping" Type="Self.UserRoleMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRoleMapping">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoleM__UserI__6C190EBB">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="UserRoleMapping" Type="Self.UserRoleMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRoleMapping">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssignClass2_classes1">
+          <End Role="classes1" Type="Self.classes1" Multiplicity="1" />
+          <End Role="AssignClass2" Type="Self.AssignClass2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes1">
+              <PropertyRef Name="classid" />
+            </Principal>
+            <Dependent Role="AssignClass2">
+              <PropertyRef Name="C_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssignClass2_Teacher">
+          <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="AssignClass2" Type="Self.AssignClass2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="T_Id" />
+            </Principal>
+            <Dependent Role="AssignClass2">
+              <PropertyRef Name="T_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_students_classes1">
+          <End Role="classes1" Type="Self.classes1" Multiplicity="1" />
+          <End Role="students" Type="Self.students" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes1">
+              <PropertyRef Name="classid" />
+            </Principal>
+            <Dependent Role="students">
+              <PropertyRef Name="classid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MySchoolModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AssignClass2" EntityType="Self.AssignClass2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="classes1" EntityType="Self.classes1" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="students" EntityType="Self.students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoleMapping" EntityType="Self.UserRoleMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__UserRoleM__RoleI__6D0D32F4" Association="Self.FK__UserRoleM__RoleI__6D0D32F4">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="UserRoleMapping" EntitySet="UserRoleMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoleM__UserI__6C190EBB" Association="Self.FK__UserRoleM__UserI__6C190EBB">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserRoleMapping" EntitySet="UserRoleMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssignClass2_classes1" Association="Self.FK_AssignClass2_classes1">
+            <End Role="classes1" EntitySet="classes1" />
+            <End Role="AssignClass2" EntitySet="AssignClass2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssignClass2_Teacher" Association="Self.FK_AssignClass2_Teacher">
+            <End Role="Teacher" EntitySet="Teacher" />
+            <End Role="AssignClass2" EntitySet="AssignClass2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_students_classes1" Association="Self.FK_students_classes1">
+            <End Role="classes1" EntitySet="classes1" />
+            <End Role="students" EntitySet="students" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MySchoolModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MySchoolEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="MySchoolModel.Admin" />
+          <EntitySet Name="AssignClass2" EntityType="MySchoolModel.AssignClass2" />
+          <EntitySet Name="classes1" EntityType="MySchoolModel.classes1" />
+          <EntitySet Name="Roles" EntityType="MySchoolModel.Role" />
+          <EntitySet Name="students" EntityType="MySchoolModel.student" />
+          <EntitySet Name="Teachers" EntityType="MySchoolModel.Teacher" />
+          <EntitySet Name="UserRoleMappings" EntityType="MySchoolModel.UserRoleMapping" />
+          <EntitySet Name="Users" EntityType="MySchoolModel.User" />
+          <AssociationSet Name="FK_AssignClass2_classes1" Association="MySchoolModel.FK_AssignClass2_classes1">
+            <End Role="classes1" EntitySet="classes1" />
+            <End Role="AssignClass2" EntitySet="AssignClass2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssignClass2_Teacher" Association="MySchoolModel.FK_AssignClass2_Teacher">
+            <End Role="Teacher" EntitySet="Teachers" />
+            <End Role="AssignClass2" EntitySet="AssignClass2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_students_classes1" Association="MySchoolModel.FK_students_classes1">
+            <End Role="classes1" EntitySet="classes1" />
+            <End Role="student" EntitySet="students" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoleM__RoleI__6D0D32F4" Association="MySchoolModel.FK__UserRoleM__RoleI__6D0D32F4">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserRoleMapping" EntitySet="UserRoleMappings" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRoleM__UserI__6C190EBB" Association="MySchoolModel.FK__UserRoleM__UserI__6C190EBB">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserRoleMapping" EntitySet="UserRoleMappings" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AssignClass2">
+          <Key>
+            <PropertyRef Name="A_Id" />
+          </Key>
+          <Property Name="A_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="T_Id" Type="Int32" Nullable="false" />
+          <Property Name="C_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="classes1" Relationship="MySchoolModel.FK_AssignClass2_classes1" FromRole="AssignClass2" ToRole="classes1" />
+          <NavigationProperty Name="Teacher" Relationship="MySchoolModel.FK_AssignClass2_Teacher" FromRole="AssignClass2" ToRole="Teacher" />
+        </EntityType>
+        <EntityType Name="classes1">
+          <Key>
+            <PropertyRef Name="classid" />
+          </Key>
+          <Property Name="classid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="classname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AssignClass2" Relationship="MySchoolModel.FK_AssignClass2_classes1" FromRole="classes1" ToRole="AssignClass2" />
+          <NavigationProperty Name="students" Relationship="MySchoolModel.FK_students_classes1" FromRole="classes1" ToRole="student" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserRoleMappings" Relationship="MySchoolModel.FK__UserRoleM__RoleI__6D0D32F4" FromRole="Role" ToRole="UserRoleMapping" />
+        </EntityType>
+        <EntityType Name="student">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="studentname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dateofbirth" Type="DateTime" Precision="0" />
+          <Property Name="classid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="classes1" Relationship="MySchoolModel.FK_students_classes1" FromRole="student" ToRole="classes1" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="T_Id" />
+          </Key>
+          <Property Name="T_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dateofjoin" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="dateofbirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AssignClass2" Relationship="MySchoolModel.FK_AssignClass2_Teacher" FromRole="Teacher" ToRole="AssignClass2" />
+        </EntityType>
+        <EntityType Name="UserRoleMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="RoleId" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="MySchoolModel.FK__UserRoleM__RoleI__6D0D32F4" FromRole="UserRoleMapping" ToRole="Role" />
+          <NavigationProperty Name="User" Relationship="MySchoolModel.FK__UserRoleM__UserI__6C190EBB" FromRole="UserRoleMapping" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserRoleMappings" Relationship="MySchoolModel.FK__UserRoleM__UserI__6C190EBB" FromRole="User" ToRole="UserRoleMapping" />
+        </EntityType>
+        <Association Name="FK_AssignClass2_classes1">
+          <End Type="MySchoolModel.classes1" Role="classes1" Multiplicity="1" />
+          <End Type="MySchoolModel.AssignClass2" Role="AssignClass2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes1">
+              <PropertyRef Name="classid" />
+            </Principal>
+            <Dependent Role="AssignClass2">
+              <PropertyRef Name="C_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssignClass2_Teacher">
+          <End Type="MySchoolModel.Teacher" Role="Teacher" Multiplicity="1" />
+          <End Type="MySchoolModel.AssignClass2" Role="AssignClass2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teacher">
+              <PropertyRef Name="T_Id" />
+            </Principal>
+            <Dependent Role="AssignClass2">
+              <PropertyRef Name="T_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_students_classes1">
+          <End Type="MySchoolModel.classes1" Role="classes1" Multiplicity="1" />
+          <End Type="MySchoolModel.student" Role="student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="classes1">
+              <PropertyRef Name="classid" />
+            </Principal>
+            <Dependent Role="student">
+              <PropertyRef Name="classid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoleM__RoleI__6D0D32F4">
+          <End Type="MySchoolModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="MySchoolModel.UserRoleMapping" Role="UserRoleMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRoleMapping">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRoleM__UserI__6C190EBB">
+          <End Type="MySchoolModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="MySchoolModel.UserRoleMapping" Role="UserRoleMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserRoleMapping">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MySchoolModelStoreContainer" CdmEntityContainer="MySchoolEntities">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="MySchoolModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssignClass2">
+            <EntityTypeMapping TypeName="MySchoolModel.AssignClass2">
+              <MappingFragment StoreEntitySet="AssignClass2">
+                <ScalarProperty Name="C_Id" ColumnName="C_Id" />
+                <ScalarProperty Name="T_Id" ColumnName="T_Id" />
+                <ScalarProperty Name="A_Id" ColumnName="A_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="classes1">
+            <EntityTypeMapping TypeName="MySchoolModel.classes1">
+              <MappingFragment StoreEntitySet="classes1">
+                <ScalarProperty Name="classname" ColumnName="classname" />
+                <ScalarProperty Name="classid" ColumnName="classid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="MySchoolModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="students">
+            <EntityTypeMapping TypeName="MySchoolModel.student">
+              <MappingFragment StoreEntitySet="students">
+                <ScalarProperty Name="classid" ColumnName="classid" />
+                <ScalarProperty Name="dateofbirth" ColumnName="dateofbirth" />
+                <ScalarProperty Name="studentname" ColumnName="studentname" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="MySchoolModel.Teacher">
+              <MappingFragment StoreEntitySet="Teacher">
+                <ScalarProperty Name="password1" ColumnName="password1" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="dateofbirth" ColumnName="dateofbirth" />
+                <ScalarProperty Name="dateofjoin" ColumnName="dateofjoin" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="T_Id" ColumnName="T_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoleMappings">
+            <EntityTypeMapping TypeName="MySchoolModel.UserRoleMapping">
+              <MappingFragment StoreEntitySet="UserRoleMapping">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MySchoolModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

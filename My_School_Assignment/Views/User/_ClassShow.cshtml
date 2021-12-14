@@ -1,0 +1,38 @@
+﻿
+              
+                    <div>
+                        <select id="mylist" multiple="multiple" required name="mySkillsName">
+                           
+                             @if (ViewBag.ClassList != null)
+                            {
+                                foreach (var item in ViewBag.ClassList.Items)
+                                {
+                                    if (item.classid != null)
+                                    {
+                                        <option value="@item.classid" selected="@item.classselected">
+                                            
+                                            @item.classname
+                                        </option>
+
+                                    }
+                                }
+                            }
+
+                        </select>
+                    </div>  
+                
+                
+
+<script type="text/javascript">
+
+   
+      
+    $(function () {
+        
+        $('#mylist').multiselect({
+            includeSelectAllOption: true
+        });
+        
+    });
+</script> 
+

@@ -1,0 +1,195 @@
+﻿@model IEnumerable<My_School_Assignment.Models.combineEntity>
+    @{
+
+        ViewBag.Title = "StudentDetails";
+
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+    }
+<br />
+<div id="details">
+ <h1>Student's Detail</h1>
+    <br />
+    <div class="alert-success ">
+        <h4><a href="#" class="btn btn-lg" onclick="ConfirmAdd();">Add Student</a> </h4>
+    </div>
+    <br />
+
+
+    
+    <link href="~/Scripts/tablesorter/themes/blue/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/tablesorter/jquery.tablesorter.min.js" type="text/javascript"> </script>
+
+    
+    <style type="text/css">
+        .table th, .table td {
+            text-align: center;
+        }
+    </style>
+    <table  id="Student" class="table table-bordered table-condensed tablesorter" >
+        <thead>
+        <tr>
+
+            <th><div style="margin-right: 10px;"><b>Student Name</b></div></th>
+            <th><div style="margin-right: 10px;"><b>Class Name</b></div></th>
+            <th><div style="margin-right: 10px;"><b>Date Of Birth</b></div></th>
+            <th><div style="margin-right: 10px;"><b> Action</b></div></th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="row_@item.id">
+
+                    <td>@Html.DisplayFor(modelItem => item.studentname)</td>
+                    <td> @Html.DisplayFor(modelItem => item.classname)</td>
+                    <td><span>@Html.DisplayFor(modelItem => item.studob)</span></td>
+                    
+                    <td>
+
+                      
+                            <a href="#" class="btn btn-lg" onclick="ConfirmEdit(@item.id)"><i class="glyphicon glyphicon-edit" title="Edit"></i></a> |
+                        
+                            <a href="#" class="btn btn-lg" onclick="ConfirmDelete(@item.id)"><i class="glyphicon glyphicon-trash" title="Delete"></i></a>
+
+
+                    </td>
+
+                </tr>
+            }
+            
+        </tbody>
+</table>
+    <input type="hidden" id="hideId" />
+  
+   
+   @Html.Hidden("TeacherId", (Int32)@ViewBag.TeacherId)
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Student</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>"Are you sure you Want to delete the Student Data?"</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" onclick="DeleteStudent()" >Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<div id="edit1"></div>
+
+
+
+
+<script>
+   
+   
+    $(document).ready(function () {
+      
+        $("#Student").tablesorter({          
+            textExtraction: {
+               
+                2: function (node, table, cellIndex) { return $(node).find("span").text(); },
+                
+            },
+            headers: {
+
+                3: { sorter: false },
+               
+            }
+
+        });
+    })
+    //add student
+    function ConfirmAdd()
+    {
+        debugger
+        var T_Id=$("#TeacherId").val();
+        $.ajax(
+           {
+                
+               type: "GET",
+               url: "/School/AddStudent",
+               data: { id3 : T_Id },
+               success: function (result) {
+                  debugger
+                   $("#details").hide();
+
+                   $("#edit1").html(result);
+       
+                   //window.location.href="EditStudent";
+               }
+                   
+           })
+    }
+       function ConfirmDelete(id) {
+
+        $("#hideId").val(id);
+        $("#myModal").modal('show');
+
+    }
+    
+    function ConfirmEdit(sid)
+       {
+       
+        var T_Id=$("#TeacherId").val();
+        $.ajax(
+            {
+                
+                type: "POST",
+                url: "/School/EditStudent",
+                data: { stid : sid , t_id : T_Id},
+                success: function (result) {
+                  
+                    $("#details").hide();
+
+                    $("#edit1").html(result);
+       
+                    //window.location.href="EditStudent";
+                }
+                   
+            })
+
+     }
+
+    function DeleteStudent() {
+
+        
+        $("#loaderDiv").show();
+
+        var id1 = $("#hideId").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: "/school/DeleteStudent",
+            data: { id1 : id1 },
+            success: function (result) {
+                $("#loaderDiv").hide();
+                $("#myModal").modal("hide");
+                $("#row_" + id1).remove();
+
+            }
+
+        })
+
+    }
+</script>
+
+
+
+
+

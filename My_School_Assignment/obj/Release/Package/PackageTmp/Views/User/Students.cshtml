@@ -1,0 +1,53 @@
+﻿@model IEnumerable<My_School_Assignment.Models.combineEntity>
+<br />
+
+    <h1>Student's Detail</h1>
+    <br />
+   
+    <link href="~/Scripts/tablesorter/themes/blue/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/tablesorter/jquery.tablesorter.min.js" type="text/javascript"> </script>
+
+<style type="text/css">
+    .table th, .table td {
+        text-align: center;
+    }
+</style>
+
+    <table id="Student" class="table table-bordered table-condensed tablesorter">
+        <thead>
+            <tr>
+
+                <th><b>Student Name</b></th>
+                <th><b>Class Name</b></th>
+                <th><b>Date Of Birth</b></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@Html.DisplayFor(modelItem => item.studentname)</td>
+                    <td> @Html.DisplayFor(modelItem => item.classname)</td>
+                    <td><span>@Html.DisplayFor(modelItem => item.studob)</span></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function () {
+            $("#Student").tablesorter({          
+                textExtraction: {
+               
+                    2: function (node, table, cellIndex) { return $(node).find("span").text(); }
+                
+                }
+               
+            });
+        })
+    </script>

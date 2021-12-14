@@ -1,0 +1,129 @@
+﻿@model IEnumerable<My_School_Assignment.classes1>
+
+    @{
+        ViewBag.Title = "Classes";
+    }
+
+    <br />
+    <div id="Details">
+        <h1>Class Details</h1><br />
+        <div class="alert-success ">
+            <h4>@Html.ActionLink("Add Class", "AddClass")</h4>
+        </div>
+        <br />
+        <link href="~/Scripts/tablesorter/themes/blue/style.css" rel="stylesheet" />
+
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/tablesorter/jquery.tablesorter.min.js" type="text/javascript"></script>
+
+        <style type="text/css">
+            .table th, .table td {
+                text-align: center;
+            }
+        </style>
+        <table class="table table-bordered table-condensed tablesorter" id="classes">
+            <thead>
+                <tr>
+                    <th><b>Class Name</b></th>
+                    <th><b>Action</b></th>
+                </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+
+
+                    <tr id="row_@item.classid">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.classname)
+                        </td>
+                        <td>
+                            <a href="#" class=" btn" onclick="ConfirmEdit(@item.classid)"><i class="glyphicon glyphicon-edit" title="Edit"></i></a> |
+                            <a href="#" class=" btn" onclick="ConfirmDelete(@item.classid)"><i class="glyphicon glyphicon-trash" title="Delete"></i></a>
+
+                        </td>
+                    </tr>
+                }
+
+    </table>
+    </div>
+    <div id="edit1"></div>
+    <input type="hidden" id="hideId"/>
+
+    @*for delete popup*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Class</h4>
+            </div>
+            <div class="modal-body">
+                <p>"If you delete this class. All the students in the class will also be deleted. Are you sure you want to delete the class & all students in it?"</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="PostDeleteClass()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+           $(document).ready(function () {
+               $("#classes").tablesorter({
+
+                   headers: {
+                       1: { sorter: false }
+                   }
+               });
+           });
+
+     function ConfirmDelete(classid) {
+
+        $("#hideId").val(classid);
+        $("#myModal").modal('show');
+
+     }
+
+     function ConfirmEdit(id)
+     {
+         $.ajax(
+             {
+                 type:"POST",
+                 url:"/School/EditClass",
+                 data: { id2 : id },
+
+                 success: function(result){
+
+                     $("#Details").hide();
+                     $("#edit1").html(result);
+        }
+    })
+     }
+
+    function PostDeleteClass() {
+
+        $("#loaderDiv").show();
+
+        var id = $("#hideId").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: "/School/PostDeleteClass",
+            data: { id: id },
+            success: function () {
+                $("#loaderDiv").hide();
+                $("#myModal").modal("hide");
+                $("#row_" + id).remove();
+
+            }
+
+        })
+
+    }
+</script>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a93002503ffc4e2e8734c2b541091224" Name="Diagram1">
+        <EntityTypeShape EntityType="MySchoolModel.Admin" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MySchoolModel.AssignClass2" Width="1.5" PointX="5" PointY="8.375" />
+        <EntityTypeShape EntityType="MySchoolModel.classes1" Width="1.5" PointX="2.75" PointY="5.5" />
+        <EntityTypeShape EntityType="MySchoolModel.Role" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="MySchoolModel.student" Width="1.5" PointX="5" PointY="5.375" />
+        <EntityTypeShape EntityType="MySchoolModel.Teacher" Width="1.5" PointX="2.75" PointY="8.125" />
+        <EntityTypeShape EntityType="MySchoolModel.UserRoleMapping" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="MySchoolModel.User" Width="1.5" PointX="0.75" PointY="4" />
+        <AssociationConnector Association="MySchoolModel.FK_AssignClass2_classes1" />
+        <AssociationConnector Association="MySchoolModel.FK_AssignClass2_Teacher" />
+        <AssociationConnector Association="MySchoolModel.FK_students_classes1" />
+        <AssociationConnector Association="MySchoolModel.FK__UserRoleM__RoleI__6D0D32F4" />
+        <AssociationConnector Association="MySchoolModel.FK__UserRoleM__UserI__6C190EBB" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

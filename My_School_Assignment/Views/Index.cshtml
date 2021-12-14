@@ -1,0 +1,102 @@
+﻿@model IEnumerable<My_School_Assignment.Models.combineEntity>
+    <br />
+<h1>Student Details</h1>
+<br />
+<div class="alert-success ">
+    <h4>@Html.ActionLink("Add Student", "AddStudents")</h4>
+</div>
+<br />
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<table class="table">
+    <tr>
+        
+        <td><b>Student Name</b></td>
+        <td><b>Class Name</b></td>
+        <td><b>Date Of Birth</b></td>
+        <td><b> Action</b></td>
+       
+    </tr>
+   
+        @foreach (var item in Model)
+        {
+            <tr id="row_@item.id">
+                
+                <td>@Html.DisplayFor(modelItem => item.studentname)</td>
+                <td> @Html.DisplayFor(modelItem => item.classname)</td>
+                <td>@Html.DisplayFor(modelItem => item.studob)</td>
+                
+                <td>
+                    
+                    
+                    @Html.ActionLink(" ", "EditStudent", new { id3 = item.id }, new { @class = "glyphicon glyphicon-edit" }) |
+                    <a href="#" class="btn btn-lg" onclick="ConfirmDelete(@item.id)"><i class="glyphicon glyphicon-trash"></i></a> 
+               
+                    
+                </td> 
+
+            </tr>
+        }
+
+</table>
+<input type="hidden" id="hideId" />
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Student</h4>
+            </div>
+            <div class="modal-body">
+                <p>"Are you sure you Want to delete the Student Data?"</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="DeleteStudent()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function ConfirmDelete(id) {
+
+        $("#hideId").val(id);
+        $("#myModal").modal('show');
+
+    }
+
+
+    function DeleteStudent() {
+
+        
+        $("#loaderDiv").show();
+
+        var id1 = $("#hideId").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: "/DataGrid/DeleteStudent",
+            data: { id1 : id1 },
+            success: function (result) {
+                $("#loaderDiv").hide();
+                $("#myModal").modal("hide");
+                $("#row_" + id1).remove();
+
+            }
+
+        })
+
+    }
+</script>
+
+
+
+
+

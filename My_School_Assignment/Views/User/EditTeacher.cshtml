@@ -1,0 +1,116 @@
+﻿@model My_School_Assignment.Models.SignupModel
+
+@using (Html.BeginForm("EditTeacher1", "User", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    
+  
+        <h4>Edit Teacher</h4>
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+  
+    @Html.HiddenFor(model => model.T_Id)
+    <div id="final">
+        <div class="form-group">
+            <label class="col-md-4">First Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.firstname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.firstname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4">Last Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lastname, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.lastname, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-md-4">Date of Birth</label>
+            <div class="col-md-10">
+
+                @Html.EditorFor(model => model.t_dob1, new { htmlAttributes = new { @class = "form-control date-picker", onkeydown = "return false", onpaste = "return false" } })
+                @Html.ValidationMessageFor(model => model.t_dob1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <label class="col-md-4">Date of joining</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.t_doj1, new { htmlAttributes = new { @class = "form-control date-picker", onkeydown = "return false", onpaste = "return false" } })
+                @Html.ValidationMessageFor(model => model.t_doj1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="reset" value="cancel" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+
+
+<script type="text/javascript">
+    //date picker function
+        $(function () {
+            $(".date-picker").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+0", // You can set the year range as per as your need
+                dateFormat: 'dd-M-yy'
+            });
+
+        });
+    //check duplicate email function
+        $( "#email" ).blur( function() {
+            {
+                var EmailId = $("#email").val();
+                var TId = $("#T_Id").val();
+                
+                var data1 = {
+                    "email": EmailId,
+                    "T_Id": TId
+                }
+
+                
+                    $.ajax(
+                             {
+                                 type: "POST",
+                                 datatype: "json",
+                                 url: "/User/CheckEmail",
+                                 data: data1,
+
+
+                                 success: function (data) 
+                                 {
+                                   
+                                     if (data == 0) {
+
+                                         alert("This email name already exist..Please enter new one!!");
+                                         $("#final").show();
+                                     }
+                     
+                                     if (data == 2 || data==1) {
+                                         $("#final").show();
+                                     }
+                                 }
+
+                             });
+                
+            }
+        })
+   
+</script>
